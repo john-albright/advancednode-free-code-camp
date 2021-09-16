@@ -43,8 +43,19 @@ myDB(async (client) => {
 
   auth(app, myDataBase);
 
+  // Initialize user count to 0
+  let currentUsers = 0;
+
+  // Listen for connections
   io.on('connection', socket => {
+    ++currentUsers;
+    // Emit user count
     console.log('A user has connected');
+
+    socket.on('disconnect', () => {
+      --currentUsers;
+      io.emit('user count', currentUsers);
+    });
   });
 
 }).catch((e) => {
