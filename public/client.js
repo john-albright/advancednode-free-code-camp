@@ -2,10 +2,12 @@ $(document).ready(function () {
   /* global io */
   let socket = io();
 
-  // Listen for user count event
-  socket.on('user count', function(data) {
-    // The value of currentUsers as defined in server.js will show up in CLIENT console
-    console.log(data);
+  // Listen for user event
+  // Use jQuery to modify the p#num-users and ul#messages
+  socket.on('user', data => {
+    $('#num-users').text(data.currentUsers + ' users online.');
+    let message = data.name + (data.connected ? ' has joined the chat.' : ' has left the chat.');
+    $('#messages').append($('<li>').html('<b>' + message + '</b>'));
   });
 
   // Form submittion with new message in field with id 'm'
